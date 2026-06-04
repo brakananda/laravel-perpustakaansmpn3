@@ -125,4 +125,31 @@ class Peminjaman extends Model
             default => $this->status,
         };
     }
+
+        /**
+     * Get class number dari buku (VII-A → VII)
+     */
+    public function getClassNumber()
+    {
+        return $this->buku->getClassNumber();
+    }
+
+    /**
+     * Hitung total denda untuk peminjaman ini
+     */
+    public function getTotalFines()
+    {
+        return $this->fines()->where('status', 'unpaid')->sum('nominal');
+    }
+
+    /**
+     * Get semua fine records untuk peminjaman ini
+     */
+    public function getFineSummary()
+    {
+        return $this->fines()
+                    ->selectRaw('jenis_denda, SUM(nominal) as total, COUNT(*) as jumlah')
+                    ->groupBy('jenis_denda')
+                    ->get();
+    }
 }
