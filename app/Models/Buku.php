@@ -16,4 +16,12 @@ class Buku extends Model {
     public function peminjamans() {
         return $this->hasMany(Peminjaman::class, 'buku_id');
     }
+
+        /**
+     * Helper: Extract class number (VII-A → VII)
+     */
+    public function getClassNumber()
+    {
+        return explode('-', $this->kelas)[0] ?? $this->kelas;
+    }
 }
